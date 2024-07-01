@@ -4,12 +4,17 @@ import { PrismaClient } from '@prisma/client';
 const db = new PrismaClient();
 const router = Router();
 
+/**
+ * 
+ * @param {string} date 
+ * @returns Date
+ */
 function FormatDate(date) {
   const day = new Date(date).getDate();
   const month = new Date(date).getMonth();
   const year = new Date(date).getFullYear();
 
-  return `${day}/${month}/${year}`;
+  return(`${day}/${month}/${year}`);
 }
 
 router.get('/cursos', async (request, response) => {
