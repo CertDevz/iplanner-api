@@ -24,7 +24,7 @@ const generateIcal = (event) => {
 
   calendar.createEvent({
     start: event.date,
-    end: new Date(event.date.getTime() + 60 * 60 * 1000),  // Supondo que a duração seja de 1 hora
+    end: new Date(event.date.getTime() + 60 * 60 * 1000), // Supondo que a duração seja de 1 hora
     summary: event.title,
     description: event.descriptionEvent,
     location: event.local,
@@ -36,6 +36,49 @@ const generateIcal = (event) => {
 
   return calendar.toString();
 };
+
+function FormatDate(date) {
+  const day = new Date(date).getDate();
+  const month = new Date(date).getMonth();
+  const year = new Date(date).getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+router.get('/cursos', async (request, response) => {
+  const query = await db.events.findMany();
+  let data = [];
+
+  query.forEach((dataDb) => {
+    const format = {
+      id: dataDb.id,
+      title: dataDb.title,
+      image: dataDb.backgroundImage,
+      description: FormatDate(dataDb.date),
+    };
+
+    data.push(format);
+  });
+
+  return response.status(200).json(data);
+});
+
+router.get('/curso/:id', async (request, response) => {
+  const query = await db.events.findUnique({
+    where: {
+      id: request.params.id,
+    },
+    include: {
+      speaker: true,
+    },
+  });
+
+  if (!query) {
+    response.status(404).json('Evento não encontrado');
+  }
+
+  return response.status(200).json(query);
+});
 
 router.post('/send-mail', async (req, res) => {
   const { email, name, eventId } = req.body;
@@ -75,7 +118,7 @@ router.post('/send-mail', async (req, res) => {
       ],
     };
 
-    console.log('Sending email to:', email);  // Log de Debug
+    console.log('Sending email to:', email); // Log de Debug
 
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: 'E-mail enviado com sucesso' });
