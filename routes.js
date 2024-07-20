@@ -27,7 +27,7 @@ const generateIcal = (event) => {
     end: new Date(event.date.getTime() + 60 * 60 * 1000), // Supondo que a duração seja de 1 hora
     summary: event.title,
     description: event.descriptionEvent,
-    location: event.local,
+    location: event.local || 'Presencial',
     organizer: {
       name: 'Iplanner',
       email: 'contato@iplanner.net.br',
@@ -81,12 +81,12 @@ router.get('/curso/:id', async (request, response) => {
 });
 
 router.post('/send-mail', async (req, res) => {
-  const { email, name, eventId } = req.body;
+  const { email, name, eventId, date, hour } = req.body;
 
   console.log('Dados recebidos:', { email, name, eventId });
 
   try {
-    if (!email || !name || !eventId) {
+    if (!email || !name || !eventId || !date || !hour) {
       return res.status(400).json({ message: 'Dados incompletos' });
     }
 
