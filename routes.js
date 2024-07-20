@@ -5,8 +5,8 @@ const db = new PrismaClient();
 const router = Router();
 
 /**
- * 
- * @param {string} date 
+ *
+ * @param {string} date
  * @returns Date
  */
 function FormatDate(date) {
@@ -14,7 +14,7 @@ function FormatDate(date) {
   const month = new Date(date).getMonth();
   const year = new Date(date).getFullYear();
 
-  return(`${day}/${month}/${year}`);
+  return `${day}/${month}/${year}`;
 }
 
 router.get('/cursos', async (request, response) => {
@@ -40,6 +40,9 @@ router.get('/curso/:id', async (request, response) => {
     where: {
       id: request.params.id,
     },
+    include: {
+      speaker: true
+    }
   });
 
   if (!query) {

@@ -5,14 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-   "start": "node index.js",
-   "prestart": "npx prisma db pull && prisma generate"
+    "start": "node index.js",
+    "prestart": "npx prisma db pull && prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^4.15.0",
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "prisma": "^5.16.1"
